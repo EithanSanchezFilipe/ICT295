@@ -3,7 +3,7 @@ import express from "express";
 
 import {products} from "../db/mock-product.mjs";
 
-import {success, getUniqueId} from "./helper.mjs"
+import {success, getUniqueId, getProduct, removeProduct} from "./helper.mjs"
 
 //Initialise un objet router
 const productsRouter = express();
@@ -25,7 +25,7 @@ productsRouter.get("/:id", (req, res) => {
 });
 
 productsRouter.post("/", (req,res) =>{
-    const id = getUniqueId(products);
+    const id = getUniqueId();
     
     //prends les éléments http et les ajoute dans l'objet created product
     const createdProduct = {...req.body, ...{id: id, created: new Date()}};
@@ -33,5 +33,16 @@ productsRouter.post("/", (req,res) =>{
 
     const message = `Le produit ${createdProduct.name} a bien été créé`;
     return res.json(success(message, products));
+});
+
+productsRouter.delete("/:id", (req, res) =>{
+    const productID = req.params.id;
+
+    //cherche le produit dont l'id est egal au parametre
+    let deletedProduct = getProduct(productID);
+    removeProduct(productID);
+
+    const message = `Le produit ${deletedProduct.name} a bien été supprimé`;
+    res.json(success(message, deletedProduct))
 });
 export {productsRouter};
