@@ -16,12 +16,12 @@ const productsRouter = express();
 productsRouter.get('/', (req, res) => {
   // Fonction qui s'exécute si l'utilisateur accède à l'URL de cette API
   const message = 'La liste des produits a bien été récupérée.';
-  res.json(success(message, products, res, 200));
+  res.json(success(message, products));
 });
 
 // Prends un paramètre dans l'URL
 productsRouter.get('/:id', (req, res) => {
-  const id = req.params.id;
+  const id = parseInt(req.params.id);
 
   // Fonction qui s'exécute si l'utilisateur accède à l'URL de cette API
   const message = 'Le produit a bien été récupéré.';
@@ -43,11 +43,12 @@ productsRouter.post('/', (req, res) => {
   products.push(createdProduct);
 
   const message = `Le produit ${createdProduct.name} a bien été créé`;
-  res.json(success(message, createdProduct, res, 200));
+  res.json(success(message, createdProduct));
 });
 
 productsRouter.delete('/:id', (req, res) => {
-  const productID = req.params.id;
+  const productID = parseInt(req.params.id);
+
   if (productExist(productID)) {
     // Cherche le produit dont l'ID est égal au paramètre
     const deletedProduct = { ...getProduct(productID) };
@@ -62,8 +63,8 @@ productsRouter.delete('/:id', (req, res) => {
 });
 
 productsRouter.put('/:id', (req, res) => {
-  const productID = req.params.id;
-  const product = getProduct(productID);
+  const productID = parseInt(req.params.id);
+  const product = { ...getProduct(productID) };
 
   // Crée un objet avec le même ID que l'on veut modifier, avec les informations qu'on veut changer et avec la même date de création
   const updatedProduct = {
@@ -74,7 +75,7 @@ productsRouter.put('/:id', (req, res) => {
   updateProduct(productID, updatedProduct);
 
   const message = `Le produit ${updatedProduct.name} dont l'ID vaut ${productID} a été mis à jour avec succès !`;
-  res.json(success(message, updatedProduct, res, 200));
+  res.json(success(message, updatedProduct));
 });
 
 export { productsRouter };
