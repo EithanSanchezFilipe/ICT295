@@ -1,7 +1,15 @@
 const success = (message, data) => {
   return {
-    message: message,
     data: data,
+    message: message,
   };
 };
-export { success };
+
+const error = (message, res, status) => {
+  res.status(status).json({
+    status: status,
+    message: message,
+  });
+};
+
+export { success, error };
