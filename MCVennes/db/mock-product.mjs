@@ -48,16 +48,27 @@ const getUniqueId = () => {
 
 const getProduct = (productID) => {
   //retourne le produit dont on cherche l'id
-  return products.find((a) => a.id == productID);
+  return products.find((a) => a.id === productID);
 };
 
 const removeProduct = (productID) => {
-  //retourne un tableau avec tous les éléments sauf celui dont on ne veut pas
-  products = products.filter((product) => product.id !== productID);
+  if (productExist(productID))
+    products = products.filter((product) => product.id !== productID);
 };
 
 const updateProduct = (productID, updatedProduct) => {
   //créé un nouveau tableau (si l'id en parametre est egal a l'id du tableau alors cet element est remplacé par le nouveau produit)
-  products = products.map((a) => (a.id == productID ? updatedProduct : a));
+  products = products.map((a) => (a.id === productID ? updatedProduct : a));
 };
-export { products, getProduct, getUniqueId, updateProduct, removeProduct };
+
+const productExist = (productID) => {
+  return products.some((a) => productID === a.id);
+};
+export {
+  products,
+  getProduct,
+  getUniqueId,
+  updateProduct,
+  removeProduct,
+  productExist,
+};
