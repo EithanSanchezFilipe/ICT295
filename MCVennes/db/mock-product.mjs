@@ -1,37 +1,37 @@
 let products = [
   {
     id: 1,
-    name: "Big Mac",
+    name: 'Big Mac',
     price: 5.99,
     created: new Date(),
   },
   {
     id: 2,
-    name: "Cheeseburger",
+    name: 'Cheeseburger',
     price: 2.49,
     created: new Date(),
   },
   {
     id: 3,
-    name: "Fries",
+    name: 'Fries',
     price: 1.99,
     created: new Date(),
   },
   {
     id: 4,
-    name: "McFlurry",
+    name: 'McFlurry',
     price: 3.49,
     created: new Date(),
   },
   {
     id: 5,
-    name: "Chicken McNuggets",
+    name: 'Chicken McNuggets',
     price: 4.29,
     created: new Date(),
   },
   {
     id: 6,
-    name: "Apple Pie",
+    name: 'Apple Pie',
     price: 1.29,
     created: new Date(),
   },
@@ -52,8 +52,7 @@ const getProduct = (productID) => {
 };
 
 const removeProduct = (productID) => {
-  if (productExist(productID))
-    products = products.filter((product) => product.id !== productID);
+  products = products.filter((product) => product.id !== productID);
 };
 
 const updateProduct = (productID, updatedProduct) => {
@@ -62,6 +61,7 @@ const updateProduct = (productID, updatedProduct) => {
 };
 
 const productExist = (productID) => {
+  //verifie qu'une condition est remplie
   return products.some((a) => productID === a.id);
 };
 export {

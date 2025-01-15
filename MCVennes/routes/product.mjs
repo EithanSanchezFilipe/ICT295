@@ -49,6 +49,7 @@ productsRouter.post('/', (req, res) => {
 productsRouter.delete('/:id', (req, res) => {
   const productID = parseInt(req.params.id);
 
+  //verifie que le produit existe
   if (productExist(productID)) {
     // Cherche le produit dont l'ID est égal au paramètre
     const deletedProduct = { ...getProduct(productID) };
@@ -57,6 +58,7 @@ productsRouter.delete('/:id', (req, res) => {
     const message = `Le produit ${deletedProduct.name} a bien été supprimé`;
     res.json(success(message, deletedProduct));
   } else {
+    //renvoie une erreur car le produit n'existe pas
     const message = `Le produit dont l'ID est égal à ${productID} n'existe pas/plus`;
     res.json(error(message, res, 400));
   }
@@ -72,6 +74,7 @@ productsRouter.put('/:id', (req, res) => {
     ...req.body,
     created: product.created,
   };
+  //mets a jour la liste de produits
   updateProduct(productID, updatedProduct);
 
   const message = `Le produit ${updatedProduct.name} dont l'ID vaut ${productID} a été mis à jour avec succès !`;
