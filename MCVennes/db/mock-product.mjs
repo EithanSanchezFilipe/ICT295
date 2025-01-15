@@ -43,7 +43,7 @@ const getUniqueId = () => {
 
   //retourne la plus haute valeur de productsID
   const maxId = productIDs.reduce((a, b) => Math.max(a, b));
-  return maxId;
+  return maxId + 1;
 };
 
 const getProduct = (productID) => {
@@ -52,11 +52,8 @@ const getProduct = (productID) => {
 };
 
 const removeProduct = (productID) => {
-  //retourne un tableau que avec les id des produits
-  const productsID = products.map((product) => product.id);
-
-  //efface le produit dont l'index est egal aux produit qui a comme id le parametre
-  products.splice(productsID.indexOf(productID), 1);
+  //retourne un tableau avec tous les éléments sauf celui dont on ne veut pas
+  products = products.filter((product) => product.id !== productID);
 };
 
 const updateProduct = (productID, updatedProduct) => {
