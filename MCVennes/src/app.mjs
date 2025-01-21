@@ -7,15 +7,14 @@ const app = express();
 app.use(express.json());
 const PORT = 3000;
 
-sequelize
-  .authenticate()
-  .then((_) =>
-    console.log('La connexion à la base de données a bien été établie')
-  )
-  .catch((error) =>
-    console.error('impossible de se connecter à la base de données')
-  );
+try {
+  await sequelize.authenticate();
+  console.log('La connexion à la base de données a bien été établie');
+} catch {
+  console.error('impossible de se connecter à la base de données');
+}
 
+//initialise la db
 initDb();
 //Définie la route principale
 app.get('/', (req, res) => {
