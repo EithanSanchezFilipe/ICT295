@@ -1,10 +1,22 @@
 import express from 'express';
 import { productsRouter } from '../routes/product.mjs';
+import { initDb, sequelize } from '../db/sequelize.mjs';
+import { error } from '../routes/helper.mjs';
 
 const app = express();
 app.use(express.json());
 const PORT = 3000;
 
+sequelize
+  .authenticate()
+  .then((_) =>
+    console.log('La connexion à la base de données a bien été établie')
+  )
+  .catch((error) =>
+    console.error('impossible de se connecter à la base de données')
+  );
+
+initDb();
 //Définie la route principale
 app.get('/', (req, res) => {
   res.send('Hello World!');
