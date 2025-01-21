@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
   {
     host: 'localhost',
     //port: "6033", pour les conteneurs docker MySQL
-    port: '6603', //uwamp temporaire
+    port: '6033', //uwamp temporaire
     dialect: 'mysql',
     logging: false,
   }
