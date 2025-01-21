@@ -8,60 +8,41 @@ import {
   productExist,
 } from '../db/mock-product.mjs';
 import { success, error } from './helper.mjs';
+import { Product } from '../db/sequelize.mjs';
 
 // Initialise un objet router
 const productsRouter = express();
 
 // Crée la route pour accéder à la fonction
 productsRouter.get('/', (req, res) => {
-  // Fonction qui s'exécute si l'utilisateur accède à l'URL de cette API
-  const message = 'La liste des produits a bien été récupérée.';
-  res.json(success(message, products));
+  Product.findAll().then((products) => {
+    const message = 'La liste des produits a bien été récupérée.';
+    res.json(success(message, products));
+  });
 });
 
 // Prends un paramètre dans l'URL
 productsRouter.get('/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-
-  // Fonction qui s'exécute si l'utilisateur accède à l'URL de cette API
-  const message = 'Le produit a bien été récupéré.';
-  return res.json(
-    success(
-      message,
-      products.find((product) => product.id == id),
-      res,
-      200
-    )
-  );
+  Product.findByPk(parseInt(req.params.id)).then((product) => {
+    const message = 'Le produit a bien été récupéré.';
+    return res.json(success(message, product));
+  });
 });
 
 productsRouter.post('/', (req, res) => {
-  const id = getUniqueId();
-
-  // Prends les éléments HTTP et les ajoute dans l'objet created product
-  const createdProduct = { ...req.body, id, created: new Date() };
-  products.push(createdProduct);
-
-  const message = `Le produit ${createdProduct.name} a bien été créé`;
-  res.json(success(message, createdProduct));
+  Product.create(req.body).then((createdProduct) => {
+    const message = `Le produit ${createdProduct.name} a bien été créé`;
+    res.json(success(message, createdProduct));
+  });
 });
 
 productsRouter.delete('/:id', (req, res) => {
-  const productID = parseInt(req.params.id);
-
-  //verifie que le produit existe
-  if (productExist(productID)) {
-    // Cherche le produit dont l'ID est égal au paramètre
-    const deletedProduct = { ...getProduct(productID) };
-    removeProduct(productID);
-
-    const message = `Le produit ${deletedProduct.name} a bien été supprimé`;
-    res.json(success(message, deletedProduct));
-  } else {
-    //renvoie une erreur car le produit n'existe pas
-    const message = `Le produit dont l'ID est égal à ${productID} n'existe pas/plus`;
-    res.json(error(message, res, 400));
-  }
+  Product.findByPk(parseInt(req.params.id)).then((deletedProduct) => {
+    Product.destroy({ where: { id: deletedProduct.id } }).then(() => {
+      const message = `Le produit ${deletedProduct.name} a bien été supprimé !`;
+      res.json(success(message, deletedProduct));
+    });
+  });
 });
 
 productsRouter.put('/:id', (req, res) => {
