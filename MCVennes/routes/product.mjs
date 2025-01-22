@@ -24,6 +24,7 @@ productsRouter.get('/', (req, res) => {
 
 // Prends un paramètre dans l'URL
 productsRouter.get('/:id', (req, res) => {
+  //findByPk trouve la  données dont l'id correspond à
   Product.findByPk(parseInt(req.params.id)).then((product) => {
     const message = 'Le produit a bien été récupéré.';
     return res.json(success(message, product));
@@ -31,6 +32,7 @@ productsRouter.get('/:id', (req, res) => {
 });
 
 productsRouter.post('/', (req, res) => {
+  //create créé une nouvelle donnée
   Product.create(req.body).then((createdProduct) => {
     const message = `Le produit ${createdProduct.name} a bien été créé`;
     res.json(success(message, createdProduct));
@@ -39,6 +41,7 @@ productsRouter.post('/', (req, res) => {
 
 productsRouter.delete('/:id', (req, res) => {
   Product.findByPk(parseInt(req.params.id)).then((deletedProduct) => {
+    //destroy efface une donnée d'une table
     Product.destroy({ where: { id: deletedProduct.id } }).then(() => {
       const message = `Le produit ${deletedProduct.name} a bien été supprimé !`;
       res.json(success(message, deletedProduct));
