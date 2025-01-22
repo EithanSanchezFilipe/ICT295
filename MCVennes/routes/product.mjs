@@ -67,10 +67,31 @@ productsRouter.delete('/:id', (req, res) => {
 productsRouter.put('/:id', (req, res) => {
   const productID = parseInt(req.params.id);
   //update mets à jour la donnée d'une table
-  Product.update(req.body, { where: { id: productID } }).then(() => {
-    Product.findByPk(productID).then((updatedProduct) => {
-      const message = `Le produit ${updatedProduct.name} dont l'id vaut ${updatedProduct.id} a été mis à jour avec succès`;
-      res.json(success(message, updatedProduct));
+  Product.update(req.body, { where: { id: productID } })
+    .then(() => {
+      Product.findByPk(productID)
+        .then((updatedProduct) => {
+          //si le produit que l'on veut modifier n'existe pas ou est nul cette erreur apparetra
+          if (!updatedProduct) {
+            const message =
+              "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
+            // A noter ici le return pour interrompre l'exécution du code
+            return res.status(404).json({ message });
+          }
+          const message = `Le produit ${updatedProduct.name} dont l'id vaut ${updatedProduct.id} a été mis à jour avec succès`;
+          res.json(success(message, updatedProduct));
+        })
+        //si le produit n'as pas pu etre mis a jour cette erreur apparetra
+        .catch((e) => {
+          const message =
+            "Le produit n'a pas pu être mis à jour. Merci de réessayer dans quelques instants.";
+          res.status(500).json({ message, data: error });
+        });
+    })
+    .catch((e) => {
+      const message =
+        "Le produit n'a pas pu être mis à jour. Merci de réessayer dans quelques instants.";
+      res.status(500).json({ message, data: error });
     });
 });
 
