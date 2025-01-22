@@ -9,10 +9,12 @@ const productsRouter = express();
 productsRouter.get('/', (req, res) => {
   //findAll trouve toutes les données d'une table
   Product.findAll()
+    //prends la valeur trouver et la renvoie en format json avec un message de succès
     .then((products) => {
       const message = 'La liste des produits a bien été récupérée.';
       res.json(success(message, products));
     })
+    //si le serveur n'arrive pas a récuperer les données il renvoie une erreur 500
     .catch((e) => {
       const message =
         "La liste des produits n'a pas pu être récupérée. Merci de réessayer dans quelques instants.";
@@ -25,6 +27,7 @@ productsRouter.get('/:id', (req, res) => {
   //findByPk trouve la  données dont l'id correspond à
   Product.findByPk(parseInt(req.params.id))
     .then((product) => {
+      //si le produit
       if (!product) {
         const message =
           "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
@@ -33,6 +36,7 @@ productsRouter.get('/:id', (req, res) => {
       const message = 'Le produit a bien été récupéré.';
       return res.json(success(message, product));
     })
+    //si le serveur n'arrive pas a récuperer la donnée il renvoie une erreur 500
     .catch((e) => {
       const message =
         "Le produit n'a pas pu être récupéré. Merci de réessayer dans quelques instants.";
@@ -47,6 +51,7 @@ productsRouter.post('/', (req, res) => {
       const message = `Le produit ${createdProduct.name} a bien été créé`;
       res.json(success(message, createdProduct));
     })
+    //si le serveur n'arrive pas a ajouter une donnée il renvoie une erreur 500
     .catch((e) => {
       const message =
         "Le produit n'a pas pu être ajouté. Merci de réessayer dans quelques instants.";
@@ -71,17 +76,16 @@ productsRouter.put('/:id', (req, res) => {
     .then(() => {
       Product.findByPk(productID)
         .then((updatedProduct) => {
-          //si le produit que l'on veut modifier n'existe pas ou est nul cette erreur apparetra
+          //si le produit que l'on veut modifier n'existe pas ou est nul l'erreur 404 apparetra
           if (!updatedProduct) {
             const message =
               "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
-            // A noter ici le return pour interrompre l'exécution du code
             return res.status(404).json({ message });
           }
           const message = `Le produit ${updatedProduct.name} dont l'id vaut ${updatedProduct.id} a été mis à jour avec succès`;
           res.json(success(message, updatedProduct));
         })
-        //si le produit n'as pas pu etre mis a jour cette erreur apparetra
+        //si le serveur n'arrive pas a ajouter une donnée il renvoie une erreur 500
         .catch((e) => {
           const message =
             "Le produit n'a pas pu être mis à jour. Merci de réessayer dans quelques instants.";
