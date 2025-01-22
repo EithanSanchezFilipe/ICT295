@@ -23,10 +23,21 @@ productsRouter.get('/', (req, res) => {
 // Prends un paramètre dans l'URL
 productsRouter.get('/:id', (req, res) => {
   //findByPk trouve la  données dont l'id correspond à
-  Product.findByPk(parseInt(req.params.id)).then((product) => {
-    const message = 'Le produit a bien été récupéré.';
-    return res.json(success(message, product));
-  });
+  Product.findByPk(parseInt(req.params.id))
+    .then((product) => {
+      if (!product) {
+        const message =
+          "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
+        return res.status(404).json({ message });
+      }
+      const message = 'Le produit a bien été récupéré.';
+      return res.json(success(message, product));
+    })
+    .catch((e) => {
+      const message =
+        "Le produit n'a pas pu être récupéré. Merci de réessayer dans quelques instants.";
+      res.status(500).json({ message, data: error });
+    });
 });
 
 productsRouter.post('/', (req, res) => {
@@ -55,7 +66,6 @@ productsRouter.put('/:id', (req, res) => {
       const message = `Le produit ${updatedProduct.name} dont l'id vaut ${updatedProduct.id} a été mis à jour avec succès`;
       res.json(success(message, updatedProduct));
     });
-  });
 });
 
 export { productsRouter };
