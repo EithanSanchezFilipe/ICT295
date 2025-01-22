@@ -23,11 +23,13 @@ const sequelize = new Sequelize(
 const Product = ProductModel(sequelize, DataTypes);
 const Category = CategoryModel(sequelize, DataTypes);
 
+//un produit appartient a une categorie 1;1
 Product.belongsTo(Category, {
   foreignKey: {
     name: 'category_id',
   },
 });
+//une categorie peut avoir plusieurs produits 0;n
 Category.hasMany(Product, {
   foreignKey: {
     name: 'category_id',

@@ -25,6 +25,13 @@ app.get('/api/', (req, res) => {
   res.redirect(`http://localhost:${PORT}`);
 });
 
+// Si aucune route ne correspondant à l'URL demandée par le consommateur
+app.use(({ res }) => {
+  const message =
+    'Impossible de trouver la ressource demandée ! Vous pouvez essayer une autre URL.';
+  res.status(404).json(message);
+});
+
 //Mets en place le router productsRouter sous la l'url /api/
 app.use('/api/products', productsRouter);
 
