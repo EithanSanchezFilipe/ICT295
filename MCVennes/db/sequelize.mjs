@@ -1,5 +1,8 @@
 import { Sequelize, DataTypes } from 'sequelize';
 import { ProductModel } from '../src/models/products.mjs';
+import { products } from './mock-product.mjs';
+import { categories } from './mock-category.mjs';
+import { CategoryModel } from '../src/models/category.mjs';
 
 //variables d'environnement
 //https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor
@@ -16,14 +19,26 @@ const sequelize = new Sequelize(
   }
 );
 
-import { products } from './mock-product.mjs';
 // Le modèle product
 const Product = ProductModel(sequelize, DataTypes);
+const Category = CategoryModel(sequelize, DataTypes);
+
+Product.belongsTo(Category, {
+  foreignKey: {
+    name: 'category_id',
+  },
+});
+Category.hasMany(Product, {
+  foreignKey: {
+    name: 'category_id',
+  },
+});
 //fonction qui initialise la db
 let initDb = () => {
   return sequelize
     .sync({ force: true }) // Force la synchro => donc supprime les données également
     .then((_) => {
+      importCategories();
       importProducts();
       console.log('La base de données db_products a bien été synchronisée');
     });
@@ -35,7 +50,15 @@ const importProducts = () => {
     Product.create({
       name: product.name,
       price: product.price,
+      category_id: product.category,
     }).then((product) => console.log(product.toJSON()));
+  });
+};
+const importCategories = () => {
+  categories.map((category) => {
+    Category.create({
+      name: category.name,
+    }).then((category) => console.log(category.toJSON()));
   });
 };
 export { sequelize, initDb, Product };

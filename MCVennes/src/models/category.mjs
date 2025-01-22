@@ -1,7 +1,7 @@
-import { CategoryModel } from './category.mjs';
-const ProductModel = (sequelize, DataTypes) => {
+import { ProductModel } from './products.mjs';
+const CategoryModel = (sequelize, DataTypes) => {
   return sequelize.define(
-    'Product',
+    'Category',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -12,10 +12,6 @@ const ProductModel = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      price: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
     },
     {
       timestamps: true,
@@ -24,4 +20,4 @@ const ProductModel = (sequelize, DataTypes) => {
     }
   );
 };
-export { ProductModel };
+export { CategoryModel };

@@ -1,12 +1,4 @@
 import express from 'express';
-import {
-  products,
-  getProduct,
-  getUniqueId,
-  removeProduct,
-  updateProduct,
-  productExist,
-} from '../db/mock-product.mjs';
 import { success, error } from './helper.mjs';
 import { Product } from '../db/sequelize.mjs';
 
