@@ -11,11 +11,13 @@ productsRouter.get('/', (req, res) => {
   Product.findAll()
     //prends la valeur trouver et la renvoie en format json avec un message de succès
     .then((products) => {
+      // Définir un message de succès pour l'utilisateur de l'API REST
       const message = 'La liste des produits a bien été récupérée.';
       res.json(success(message, products));
     })
     //si le serveur n'arrive pas a récuperer les données il renvoie une erreur 500
     .catch((e) => {
+      // Définir un message d'erreur pour l'utilisateur de l'API REST
       const message =
         "La liste des produits n'a pas pu être récupérée. Merci de réessayer dans quelques instants.";
       res.status(500).json({ message, data: error });
@@ -29,10 +31,12 @@ productsRouter.get('/:id', (req, res) => {
     .then((product) => {
       //si le produit
       if (!product) {
+        // Définir un message d'erreur pour l'utilisateur de l'API REST
         const message =
           "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
         return res.status(404).json({ message });
       }
+      // Définir un message de succès pour l'utilisateur de l'API REST
       const message = 'Le produit a bien été récupéré.';
       return res.json(success(message, product));
     })
@@ -48,11 +52,13 @@ productsRouter.post('/', (req, res) => {
   //create créé une nouvelle donnée
   Product.create(req.body)
     .then((createdProduct) => {
+      // Définir un message de succès pour l'utilisateur de l'API REST
       const message = `Le produit ${createdProduct.name} a bien été créé`;
       res.json(success(message, createdProduct));
     })
     //si le serveur n'arrive pas a ajouter une donnée il renvoie une erreur 500
     .catch((e) => {
+      // Définir un message d'erreur pour l'utilisateur de l'API REST
       const message =
         "Le produit n'a pas pu être ajouté. Merci de réessayer dans quelques instants.";
       res.status(500).json({ message, data: error });
@@ -60,13 +66,28 @@ productsRouter.post('/', (req, res) => {
 });
 
 productsRouter.delete('/:id', (req, res) => {
-  Product.findByPk(parseInt(req.params.id)).then((deletedProduct) => {
-    //destroy efface une donnée d'une table
-    Product.destroy({ where: { id: deletedProduct.id } }).then(() => {
-      const message = `Le produit ${deletedProduct.name} a bien été supprimé !`;
-      res.json(success(message, deletedProduct));
+  Product.findByPk(parseInt(req.params.id))
+    .then((deletedProduct) => {
+      if (!deletedProduct) {
+        // Définir un message d'erreur pour l'utilisateur de l'API REST
+        const message =
+          "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
+        // A noter ici le return pour interrompre l'exécution du code
+        return res.status(404).json({ message });
+      }
+      //destroy efface une donnée d'une table
+      Product.destroy({ where: { id: deletedProduct.id } }).then(() => {
+        // Définir un message de succès pour l'utilisateur de l'API REST
+        const message = `Le produit ${deletedProduct.name} a bien été supprimé !`;
+        res.json(success(message, deletedProduct));
+      });
+    })
+    .catch((e) => {
+      // Définir un message d'erreur pour l'utilisateur de l'API REST
+      const message =
+        "Le produit n'a pas pu être supprimé. Merci de réessayer dans quelques instants.";
+      res.status(500).json({ message, data: error });
     });
-  });
 });
 
 productsRouter.put('/:id', (req, res) => {
@@ -74,25 +95,21 @@ productsRouter.put('/:id', (req, res) => {
   //update mets à jour la donnée d'une table
   Product.update(req.body, { where: { id: productID } })
     .then(() => {
-      Product.findByPk(productID)
-        .then((updatedProduct) => {
-          //si le produit que l'on veut modifier n'existe pas ou est nul l'erreur 404 apparetra
-          if (!updatedProduct) {
-            const message =
-              "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
-            return res.status(404).json({ message });
-          }
-          const message = `Le produit ${updatedProduct.name} dont l'id vaut ${updatedProduct.id} a été mis à jour avec succès`;
-          res.json(success(message, updatedProduct));
-        })
-        //si le serveur n'arrive pas a ajouter une donnée il renvoie une erreur 500
-        .catch((e) => {
+      Product.findByPk(productID).then((updatedProduct) => {
+        //si le produit que l'on veut modifier n'existe pas ou est nul l'erreur 404 apparetra
+        if (!updatedProduct) {
+          // Définir un message d'erreur pour l'utilisateur de l'API REST
           const message =
-            "Le produit n'a pas pu être mis à jour. Merci de réessayer dans quelques instants.";
-          res.status(500).json({ message, data: error });
-        });
+            "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
+          return res.status(404).json({ message });
+        }
+        // Définir un message de succès pour l'utilisateur de l'API REST
+        const message = `Le produit ${updatedProduct.name} dont l'id vaut ${updatedProduct.id} a été mis à jour avec succès`;
+        res.json(success(message, updatedProduct));
+      });
     })
     .catch((e) => {
+      // Définir un message d'erreur pour l'utilisateur de l'API REST
       const message =
         "Le produit n'a pas pu être mis à jour. Merci de réessayer dans quelques instants.";
       res.status(500).json({ message, data: error });
