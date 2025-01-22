@@ -8,10 +8,16 @@ const productsRouter = express();
 // Crée la route pour accéder à la fonction
 productsRouter.get('/', (req, res) => {
   //findAll trouve toutes les données d'une table
-  Product.findAll().then((products) => {
-    const message = 'La liste des produits a bien été récupérée.';
-    res.json(success(message, products));
-  });
+  Product.findAll()
+    .then((products) => {
+      const message = 'La liste des produits a bien été récupérée.';
+      res.json(success(message, products));
+    })
+    .catch((e) => {
+      const message =
+        "La liste des produits n'a pas pu être récupérée. Merci de réessayer dans quelques instants.";
+      res.status(500).json({ message, data: error });
+    });
 });
 
 // Prends un paramètre dans l'URL
