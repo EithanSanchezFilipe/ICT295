@@ -15,6 +15,7 @@ const productsRouter = express();
 
 // Crée la route pour accéder à la fonction
 productsRouter.get('/', (req, res) => {
+  //findAll trouve toutes les données d'une table
   Product.findAll().then((products) => {
     const message = 'La liste des produits a bien été récupérée.';
     res.json(success(message, products));
@@ -47,19 +48,13 @@ productsRouter.delete('/:id', (req, res) => {
 
 productsRouter.put('/:id', (req, res) => {
   const productID = parseInt(req.params.id);
-  const product = { ...getProduct(productID) };
-
-  // Crée un objet avec le même ID que l'on veut modifier, avec les informations qu'on veut changer et avec la même date de création
-  const updatedProduct = {
-    id: productID,
-    ...req.body,
-    created: product.created,
-  };
-  //mets a jour la liste de produits
-  updateProduct(productID, updatedProduct);
-
-  const message = `Le produit ${updatedProduct.name} dont l'ID vaut ${productID} a été mis à jour avec succès !`;
-  res.json(success(message, updatedProduct));
+  //update mets à jour la donnée d'une table
+  Product.update(req.body, { where: { id: productID } }).then(() => {
+    Product.findByPk(productID).then((updatedProduct) => {
+      const message = `Le produit ${updatedProduct.name} dont l'id vaut ${updatedProduct.id} a été mis à jour avec succès`;
+      res.json(success(message, updatedProduct));
+    });
+  });
 });
 
 export { productsRouter };
