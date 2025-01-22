@@ -42,10 +42,16 @@ productsRouter.get('/:id', (req, res) => {
 
 productsRouter.post('/', (req, res) => {
   //create créé une nouvelle donnée
-  Product.create(req.body).then((createdProduct) => {
-    const message = `Le produit ${createdProduct.name} a bien été créé`;
-    res.json(success(message, createdProduct));
-  });
+  Product.create(req.body)
+    .then((createdProduct) => {
+      const message = `Le produit ${createdProduct.name} a bien été créé`;
+      res.json(success(message, createdProduct));
+    })
+    .catch((e) => {
+      const message =
+        "Le produit n'a pas pu être ajouté. Merci de réessayer dans quelques instants.";
+      res.status(500).json({ message, data: error });
+    });
 });
 
 productsRouter.delete('/:id', (req, res) => {
