@@ -41,6 +41,13 @@ let products = [
     category: 1,
     created: new Date(),
   },
+  {
+    id: 7,
+    name: 'Big Tasty',
+    price: 5.99,
+    category: 1,
+    created: new Date(),
+  },
 ];
 
 export { products };

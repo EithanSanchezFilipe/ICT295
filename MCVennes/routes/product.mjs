@@ -9,6 +9,15 @@ const productsRouter = express();
 
 // Crée la route pour accéder à la fonction
 productsRouter.get('/', (req, res) => {
+  //si il y a un nom dans la requete alors il cherche tous les produits qui ont se nom
+  if (req.query.name) {
+    return Product.findAll({
+      where: { name: { [Op.like]: `%${req.query.name}%` } },
+    }).then((products) => {
+      const message = `Il y a ${products.length} produits qui correspondent au terme de la recherche`;
+      res.json(success(message, products));
+    });
+  }
   //findAll trouve toutes les données d'une table
   Product.findAll()
     //prends la valeur trouver et la renvoie en format json avec un message de succès
