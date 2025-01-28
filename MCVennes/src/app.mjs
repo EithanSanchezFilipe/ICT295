@@ -1,5 +1,6 @@
 import express from 'express';
 import { productsRouter } from '../routes/product.mjs';
+import { orderRouter } from '../routes/order.mjs';
 import { initDb, sequelize } from '../db/sequelize.mjs';
 import { error } from '../routes/helper.mjs';
 
@@ -27,6 +28,7 @@ app.get('/api/', (req, res) => {
 
 //Mets en place le router productsRouter sous la l'url /api/
 app.use('/api/products', productsRouter);
+app.use('/api/order', orderRouter);
 
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 app.use(({ res }) => {

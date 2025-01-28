@@ -77,4 +77,4 @@ const importCategories = () => {
     }).then((category) => console.log(category.toJSON()));
   });
 };
-export { sequelize, initDb, Product, Category };
+export { sequelize, initDb, Product, Category, Order, ProductOrder };
