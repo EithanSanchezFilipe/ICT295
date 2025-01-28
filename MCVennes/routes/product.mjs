@@ -19,9 +19,6 @@ productsRouter.get('/', (req, res) => {
     })
     //si le serveur n'arrive pas a récuperer les données il renvoie une erreur 500
     .catch((e) => {
-      if (e instanceof ValidationError) {
-        return res.status(400).json({ message: error.message, data: error });
-      }
       // Définir un message d'erreur pour l'utilisateur de l'API REST
       const message =
         "La liste des produits n'a pas pu être récupérée. Merci de réessayer dans quelques instants.";
@@ -72,6 +69,10 @@ productsRouter.post('/', (req, res) => {
     })
     //si le serveur n'arrive pas a ajouter une donnée il renvoie une erreur 500
     .catch((e) => {
+      //si c'est une erreur de validation renvoie le messgae personnalisé
+      if (e instanceof ValidationError) {
+        return res.status(400).json({ message: e.message, data: e });
+      }
       // Définir un message d'erreur pour l'utilisateur de l'API REST
       const message =
         "Le produit n'a pas pu être ajouté. Merci de réessayer dans quelques instants.";
