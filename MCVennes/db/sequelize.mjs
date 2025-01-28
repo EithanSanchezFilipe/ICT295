@@ -29,13 +29,13 @@ const Category = CategoryModel(sequelize, DataTypes);
 //un produit appartient a une categorie 1;1
 Product.belongsTo(Category, {
   foreignKey: {
-    name: 'category_id',
+    name: 'category_fk',
   },
 });
 //une categorie peut avoir plusieurs produits 0;n
 Category.hasMany(Product, {
   foreignKey: {
-    name: 'category_id',
+    name: 'category_fk',
   },
 });
 //fonction qui initialise la db
@@ -55,7 +55,7 @@ const importProducts = () => {
     Product.create({
       name: product.name,
       price: product.price,
-      category_id: product.category,
+      category_fk: product.category,
     }).then((product) => console.log(product.toJSON()));
   });
 };
@@ -66,4 +66,4 @@ const importCategories = () => {
     }).then((category) => console.log(category.toJSON()));
   });
 };
-export { sequelize, initDb, Product };
+export { sequelize, initDb, Product, Category };
