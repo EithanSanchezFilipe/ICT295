@@ -1,4 +1,3 @@
-import { CategoryModel } from './category.mjs';
 const ProductModel = (sequelize, DataTypes) => {
   return sequelize.define(
     't_product',
@@ -11,10 +10,33 @@ const ProductModel = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          is: {
+            args: /^[A-Za-z\s]*$/,
+            msg: 'Seules les lettres et les espaces sont autorisées',
+          },
+          notEmpty: {
+            msg: 'Le nom ne peut pas être vide.',
+          },
+          notNull: {
+            msg: 'Le nom est un propriété obligatoire',
+          },
+        },
       },
       price: {
         type: DataTypes.FLOAT,
         allowNull: false,
+        validate: {
+          isFloat: {
+            msg: 'Utilisez uniquement des nombres pour le prix.',
+          },
+          notEmpty: {
+            msg: 'Le prix ne peut pas être vide',
+          },
+          notNull: {
+            msg: 'Le prix est un propriété obligatoire',
+          },
+        },
       },
     },
     {

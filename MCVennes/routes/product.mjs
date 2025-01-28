@@ -1,6 +1,8 @@
 import express from 'express';
 import { success, error } from './helper.mjs';
 import { Product } from '../db/sequelize.mjs';
+import { Category } from '../db/sequelize.mjs';
+import { ValidationError } from 'sequelize';
 
 // Initialise un objet router
 const productsRouter = express();
@@ -17,6 +19,9 @@ productsRouter.get('/', (req, res) => {
     })
     //si le serveur n'arrive pas a récuperer les données il renvoie une erreur 500
     .catch((e) => {
+      if (e instanceof ValidationError) {
+        return res.status(400).json({ message: error.message, data: error });
+      }
       // Définir un message d'erreur pour l'utilisateur de l'API REST
       const message =
         "La liste des produits n'a pas pu être récupérée. Merci de réessayer dans quelques instants.";
@@ -27,10 +32,19 @@ productsRouter.get('/', (req, res) => {
 // Prends un paramètre dans l'URL
 productsRouter.get('/:id', (req, res) => {
   //findByPk trouve la  données dont l'id correspond à
-  Product.findByPk(parseInt(req.params.id))
-    .then((product) => {
+  Product.findByPk(parseInt(req.params.id), {
+    //charge la catégorie qui lui correspond
+    include: [
+      {
+        model: Category,
+        //recupere juste le nom
+        attributes: ['name'],
+      },
+    ],
+  })
+    .then((foundProduct) => {
       //si le produit
-      if (!product) {
+      if (!foundProduct) {
         // Définir un message d'erreur pour l'utilisateur de l'API REST
         const message =
           "Le produit demandé n'existe pas. Merci de réessayer avec un autre identifiant.";
@@ -38,7 +52,7 @@ productsRouter.get('/:id', (req, res) => {
       }
       // Définir un message de succès pour l'utilisateur de l'API REST
       const message = 'Le produit a bien été récupéré.';
-      return res.json(success(message, product));
+      return res.json(success(message, foundProduct));
     })
     //si le serveur n'arrive pas a récuperer la donnée il renvoie une erreur 500
     .catch((e) => {
