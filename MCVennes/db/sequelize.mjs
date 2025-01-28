@@ -16,6 +16,9 @@ const sequelize = new Sequelize(
     port: '6033',
     dialect: 'mysql',
     logging: false,
+    define: {
+      freezeTableName: true,
+    },
   }
 );
 

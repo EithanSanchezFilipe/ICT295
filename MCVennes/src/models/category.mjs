@@ -1,7 +1,6 @@
-import { ProductModel } from './products.mjs';
 const CategoryModel = (sequelize, DataTypes) => {
   return sequelize.define(
-    'Category',
+    't_category',
     {
       id: {
         type: DataTypes.INTEGER,
