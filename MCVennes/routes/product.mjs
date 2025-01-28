@@ -2,7 +2,7 @@ import express from 'express';
 import { success, error } from './helper.mjs';
 import { Product } from '../db/sequelize.mjs';
 import { Category } from '../db/sequelize.mjs';
-import { ValidationError } from 'sequelize';
+import { ValidationError, Op } from 'sequelize';
 
 // Initialise un objet router
 const productsRouter = express();
@@ -11,8 +11,14 @@ const productsRouter = express();
 productsRouter.get('/', (req, res) => {
   //si il y a un nom dans la requete alors il cherche tous les produits qui ont se nom
   if (req.query.name) {
+    let limit = 3;
+    if (req.query.limit) {
+      limit = req.query.limit;
+    }
     return Product.findAll({
+      //select * from product where name like %...%
       where: { name: { [Op.like]: `%${req.query.name}%` } },
+      limit: limit,
     }).then((products) => {
       const message = `Il y a ${products.length} produits qui correspondent au terme de la recherche`;
       res.json(success(message, products));
