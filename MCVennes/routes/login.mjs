@@ -27,7 +27,5 @@ loginRouter.post('/', (req, res) => {
       }
     });
   });
-  const message = `L'utilisateur a été connecté avec succès`;
-  return res.json({ message, data: user, token });
 });
 export { loginRouter };
