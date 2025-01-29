@@ -51,13 +51,19 @@ orderRouter.get('/', (req, res) => {
         ],
       },
     ],
-  }).then((user) => {
-    if (!user.t_orders.length) {
-      const message = "L'utilisateur n'a pas de commandes";
-      return res.status(400).json({ message });
-    }
-    const message = `l\'utilisateur possède ${user.t_orders.length} commandes`;
-    res.status(200).json({ message, data: user });
-  });
+  })
+    .then((user) => {
+      if (!user.t_orders.length) {
+        const message = "L'utilisateur n'a pas de commandes";
+        return res.status(400).json({ message });
+      }
+      const message = `l\'utilisateur possède ${user.t_orders.length} commandes`;
+      res.status(200).json({ message, data: user });
+    })
+    .catch((e) => {
+      const message =
+        "Le commande n'a pas pu être passée. Merci de réessayer dans quelques instants.";
+      res.status(500).json({ message, data: e });
+    });
 });
 export { orderRouter };
