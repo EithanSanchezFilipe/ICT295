@@ -11,7 +11,7 @@ const productsRouter = express();
 productsRouter.get('/', (req, res) => {
   //si il y a un nom dans la requete alors il cherche tous les produits qui ont se nom
   if (req.query.name) {
-    if (req.query.name < 2) {
+    if (req.query.name.length < 2) {
       const message = `Le terme de la recherche doit contenir au moins 2 caractères`;
       return res.status(400).json({ message });
     }
