@@ -39,11 +39,12 @@ initAssociations(Product, Category, Order, ProductOrder, User);
 //fonction qui initialise la db
 let initDb = () => {
   return sequelize
-    .sync({ force: true }) // Force la synchro => donc supprime les données également
+    .sync({ alter: true }) // Force la synchro => donc supprime les données également
     .then((_) => {
+      /*
       importCategories();
       importProducts();
-      importUsers();
+      importUsers();*/
       console.log('La base de données db_products a bien été synchronisée');
     });
 };
