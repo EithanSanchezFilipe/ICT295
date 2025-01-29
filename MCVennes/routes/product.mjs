@@ -11,6 +11,10 @@ const productsRouter = express();
 productsRouter.get('/', (req, res) => {
   //si il y a un nom dans la requete alors il cherche tous les produits qui ont se nom
   if (req.query.name) {
+    if (req.query.name < 2) {
+      const message = `Le terme de la recherche doit contenir au moins 2 caractères`;
+      return res.status(400).json({ message });
+    }
     let limit = 3;
     if (req.query.limit) {
       limit = req.query.limit;
@@ -18,6 +22,7 @@ productsRouter.get('/', (req, res) => {
     return Product.findAll({
       //select * from product where name like %...%
       where: { name: { [Op.like]: `%${req.query.name}%` } },
+      order: ['name'],
       limit: limit,
     }).then((products) => {
       const message = `Il y a ${products.length} produits qui correspondent au terme de la recherche`;
