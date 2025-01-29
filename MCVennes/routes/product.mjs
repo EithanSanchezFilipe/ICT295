@@ -7,7 +7,40 @@ import { auth } from '../auth/auth.mjs';
 // Initialise un objet router
 const productsRouter = express();
 
-// Crée la route pour accéder à la fonction
+/**
+ * @swagger
+ * /api/products/:
+ * get:
+ * tags: [Products]
+ * security:
+ * - bearerAuth: []
+ * summary: Retrieve all products.
+ * description: Retrieve all products. Can be used to populate a select HTML tag.
+ * responses:
+ * 200:
+ * description: All products.
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * data:
+ * type: object
+ * properties:
+ * id:
+ * type: integer
+ * description: The product ID.
+ * example: 1
+ * name:
+ * type: string
+ * description: The product's name.
+ * example: Big Mac
+ * price:
+ * type: number
+ * description: The product's price.
+ * example: 5.99
+ *
+ */
 productsRouter.get('/', auth, (req, res) => {
   //si il y a un nom dans la requete alors il cherche tous les produits qui ont se nom
   if (req.query.name) {
@@ -46,7 +79,44 @@ productsRouter.get('/', auth, (req, res) => {
     });
 });
 
-// Prends un paramètre dans l'URL
+/**
+ * @swagger
+ * /api/products/:
+ *  get:
+ *    tags: [Products]
+ *    security:
+ *      - bearerAuth: []
+ *    summary: Retrieve all products.
+ *    description: Retrieve all products. Can be used to populate a select HTML tag.
+ *    responses:
+ *      200:
+ *        description: All products.
+ *        content:
+ *          application/json:
+ *          schema:
+ *          type: object
+ *          properties:
+ *          data:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: integer
+ *              description: The product ID.
+ *              example: 1
+ *            name:
+ *              type: string
+ *              description: The product's name.
+ *              example: Big Mac
+ *            price:
+ *              type: number
+ *              description: The product's price.
+ *              example: 5.99
+ *            category_fk:
+ *              type: integer
+ *              description: The product's category id.
+ *              example: 1
+ *
+ */
 productsRouter.get('/:id', auth, (req, res) => {
   //findByPk trouve la  données dont l'id correspond à
   Product.findByPk(parseInt(req.params.id), {
@@ -78,7 +148,45 @@ productsRouter.get('/:id', auth, (req, res) => {
       res.status(500).json({ message, data: error });
     });
 });
-
+/**
+ * @swagger
+ * /api/products/:
+ *  get:
+ *    tags: [Products]
+ *    security:
+ *      - bearerAuth: []
+ *    summary: Retrieve all products.
+ *    description: Retrieve 1 products by its ID along as his associated category.
+ *    responses:
+ *      200:
+ *        description: product.
+ *        content:
+ *          application/json:
+ *          schema:
+ *          type: object
+ *          properties:
+ *          data:
+ *          type: object
+ *            properties:
+ *              id:
+ *                type: integer
+ *                description: The product ID.
+ *                example: 1
+ *              name:
+ *                type: string
+ *                description: The product's name.
+ *                example: Big Mac
+ *              price:
+ *                type: number
+ *                description: The product's price.
+ *                example: 5.99
+ *              category_fk:
+ *                type: integer
+ *                description: The product's category id.
+ *                example: 1
+ *
+ *
+ */
 productsRouter.post('/', auth, (req, res) => {
   //create créé une nouvelle donnée
   Product.create(req.body)

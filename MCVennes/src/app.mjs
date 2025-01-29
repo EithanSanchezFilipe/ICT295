@@ -5,6 +5,8 @@ import { loginRouter } from '../routes/login.mjs';
 import { registerRouter } from '../routes/register.mjs';
 import { initDb, sequelize } from '../db/sequelize.mjs';
 import { error } from '../routes/helper.mjs';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './swagger.mjs';
 
 const app = express();
 app.use(express.json());
@@ -19,6 +21,12 @@ try {
 
 //initialise la db
 initDb();
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, { explorer: true })
+);
 //Définie la route principale
 app.get('/', (req, res) => {
   res.send('Hello World!');
