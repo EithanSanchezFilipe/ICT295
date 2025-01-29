@@ -34,7 +34,7 @@ const Order = OrderModel(sequelize, DataTypes);
 const ProductOrder = ProductOrderModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
 //Méthode qui fait les associations entre les tables
-initAssociations(Product, Category, Order, ProductOrder);
+initAssociations(Product, Category, Order, ProductOrder, User);
 
 //fonction qui initialise la db
 let initDb = () => {

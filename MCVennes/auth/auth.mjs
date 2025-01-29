@@ -17,7 +17,7 @@ const auth = (req, res, next) => {
           const message = `L'utilisateur n'est pas autorisé à accéder à cette ressource.`;
           return res.status(401).json({ message, data: error });
         }
-        //vérifie que si il y a un userId dans la requete et qu'elle ne
+        //vérifie si il y a un userId dans la requete et qu'elle ne
         //correspond pas a celle du token cela signifie que l'utilisateur
         //essaie d'accéder à une ressource qui ne lui appartient pas.
         const userId = decodedToken.userId;

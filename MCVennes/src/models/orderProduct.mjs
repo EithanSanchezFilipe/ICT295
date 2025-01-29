@@ -1,6 +1,6 @@
 const ProductOrderModel = (sequelize, DataTypes) => {
   return sequelize.define(
-    'ProductOrder',
+    't_productOrder',
     {
       product_fk: {
         type: DataTypes.INTEGER,

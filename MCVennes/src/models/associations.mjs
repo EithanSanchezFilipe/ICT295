@@ -1,4 +1,4 @@
-const initAssociations = (Product, Category, Order, ProductOrder) => {
+const initAssociations = (Product, Category, Order, ProductOrder, User) => {
   //un produit appartient a une categorie 1;1
   Product.belongsTo(Category, {
     foreignKey: 'category_fk',
@@ -16,6 +16,12 @@ const initAssociations = (Product, Category, Order, ProductOrder) => {
   Order.belongsToMany(Product, {
     through: ProductOrder,
     foreignKey: 'order_fk',
+  });
+  User.hasMany(Order, {
+    foreignKey: 'user_fk',
+  });
+  Order.belongsTo(User, {
+    foreignKey: 'user_fk',
   });
 };
 export { initAssociations };

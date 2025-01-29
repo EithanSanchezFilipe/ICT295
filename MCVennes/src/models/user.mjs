@@ -1,5 +1,5 @@
 const UserModel = (sequelize, DataTypes) => {
-  return sequelize.define('User', {
+  return sequelize.define('t_user', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
