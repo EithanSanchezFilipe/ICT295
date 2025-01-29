@@ -2,6 +2,7 @@ import express from 'express';
 import { productsRouter } from '../routes/product.mjs';
 import { orderRouter } from '../routes/order.mjs';
 import { loginRouter } from '../routes/login.mjs';
+import { registerRouter } from '../routes/register.mjs';
 import { initDb, sequelize } from '../db/sequelize.mjs';
 import { error } from '../routes/helper.mjs';
 
@@ -31,6 +32,7 @@ app.get('/api/', (req, res) => {
 app.use('/api/products', productsRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/register', registerRouter);
 
 // Si aucune route ne correspondant à l'URL demandée par le consommateur
 app.use(({ res }) => {
