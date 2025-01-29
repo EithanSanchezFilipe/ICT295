@@ -3,12 +3,12 @@ import { success, error } from './helper.mjs';
 import { Product } from '../db/sequelize.mjs';
 import { Category } from '../db/sequelize.mjs';
 import { ValidationError, Op } from 'sequelize';
-
+import { auth } from '../auth/auth.mjs';
 // Initialise un objet router
 const productsRouter = express();
 
 // Crée la route pour accéder à la fonction
-productsRouter.get('/', (req, res) => {
+productsRouter.get('/', auth, (req, res) => {
   //si il y a un nom dans la requete alors il cherche tous les produits qui ont se nom
   if (req.query.name) {
     if (req.query.name.length < 2) {
@@ -47,7 +47,7 @@ productsRouter.get('/', (req, res) => {
 });
 
 // Prends un paramètre dans l'URL
-productsRouter.get('/:id', (req, res) => {
+productsRouter.get('/:id', auth, (req, res) => {
   //findByPk trouve la  données dont l'id correspond à
   Product.findByPk(parseInt(req.params.id), {
     //charge la catégorie qui lui correspond
@@ -79,7 +79,7 @@ productsRouter.get('/:id', (req, res) => {
     });
 });
 
-productsRouter.post('/', (req, res) => {
+productsRouter.post('/', auth, (req, res) => {
   //create créé une nouvelle donnée
   Product.create(req.body)
     .then((createdProduct) => {
@@ -100,7 +100,7 @@ productsRouter.post('/', (req, res) => {
     });
 });
 
-productsRouter.delete('/:id', (req, res) => {
+productsRouter.delete('/:id', auth, (req, res) => {
   Product.findByPk(parseInt(req.params.id))
     .then((deletedProduct) => {
       if (!deletedProduct) {
@@ -125,7 +125,7 @@ productsRouter.delete('/:id', (req, res) => {
     });
 });
 
-productsRouter.put('/:id', (req, res) => {
+productsRouter.put('/:id', auth, (req, res) => {
   const productID = parseInt(req.params.id);
   //update mets à jour la donnée d'une table
   Product.update(req.body, { where: { id: productID } })

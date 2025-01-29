@@ -76,4 +76,4 @@ const importUsers = () => {
     )
     .then((user) => console.log(user.toJSON()));
 };
-export { sequelize, initDb, Product, Category, Order, ProductOrder };
+export { sequelize, initDb, Product, Category, Order, ProductOrder, User };
