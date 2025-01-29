@@ -6,6 +6,8 @@ import { CategoryModel } from '../src/models/category.mjs';
 import { OrderModel } from '../src/models/order.mjs';
 import { ProductOrderModel } from '../src/models/orderProduct.mjs';
 import { initAssociations } from '../src/models/associations.mjs';
+import bcrypt from 'bcrypt';
+import { UserModel } from '../src/models/user.mjs';
 
 //variables d'environnement
 //https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor
@@ -30,7 +32,7 @@ const Product = ProductModel(sequelize, DataTypes);
 const Category = CategoryModel(sequelize, DataTypes);
 const Order = OrderModel(sequelize, DataTypes);
 const ProductOrder = ProductOrderModel(sequelize, DataTypes);
-
+const User = UserModel(sequelize, DataTypes);
 //Méthode qui fait les associations entre les tables
 initAssociations(Product, Category, Order, ProductOrder);
 
@@ -41,6 +43,7 @@ let initDb = () => {
     .then((_) => {
       importCategories();
       importProducts();
+      importUsers();
       console.log('La base de données db_products a bien été synchronisée');
     });
 };
@@ -61,5 +64,16 @@ const importCategories = () => {
       name: category.name,
     }).then((category) => console.log(category.toJSON()));
   });
+};
+const importUsers = () => {
+  bcrypt
+    .hash('etml', 10) // temps pour hasher = du sel
+    .then((hash) =>
+      User.create({
+        username: 'etml',
+        password: hash,
+      })
+    )
+    .then((user) => console.log(user.toJSON()));
 };
 export { sequelize, initDb, Product, Category, Order, ProductOrder };
