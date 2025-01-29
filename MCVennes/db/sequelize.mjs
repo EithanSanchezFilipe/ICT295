@@ -5,6 +5,7 @@ import { categories } from './mock-category.mjs';
 import { CategoryModel } from '../src/models/category.mjs';
 import { OrderModel } from '../src/models/order.mjs';
 import { ProductOrderModel } from '../src/models/orderProduct.mjs';
+import { initAssociations } from '../src/models/associations.mjs';
 
 //variables d'environnement
 //https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor
@@ -30,24 +31,8 @@ const Category = CategoryModel(sequelize, DataTypes);
 const Order = OrderModel(sequelize, DataTypes);
 const ProductOrder = ProductOrderModel(sequelize, DataTypes);
 
-//un produit appartient a une categorie 1;1
-Product.belongsTo(Category, {
-  foreignKey: 'category_fk',
-});
-//une categorie peut avoir plusieurs produits 0;n
-Category.hasMany(Product, {
-  foreignKey: 'category_fk',
-});
-//un produit peut être dans plusieurs commandes 0;n
-Product.belongsToMany(Order, {
-  through: ProductOrder,
-  foreignKey: 'product_fk',
-});
-//une commande peut avoir plusieurs produits 0;n
-Order.belongsToMany(Product, {
-  through: ProductOrder,
-  foreignKey: 'order_fk',
-});
+//Méthode qui fait les associations entre les tables
+initAssociations(Product, Category, Order, ProductOrder);
 
 //fonction qui initialise la db
 let initDb = () => {
