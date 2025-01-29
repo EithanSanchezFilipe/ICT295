@@ -1,5 +1,6 @@
 import express from 'express';
 import { Order } from '../db/sequelize.mjs';
+import { Product } from '../db/sequelize.mjs';
 import { ProductOrder } from '../db/sequelize.mjs';
 import { User } from '../db/sequelize.mjs';
 import { auth } from '../auth/auth.mjs';
@@ -37,5 +38,26 @@ orderRouter.post('/', auth, (req, res) => {
       res.status(500).json({ message, data: e });
     });
 });
-orderRouter.get('/', (req, res) => {});
+orderRouter.get('/', (req, res) => {
+  User.findByPk(req.body.userId, {
+    include: [
+      {
+        model: Order,
+        include: [
+          {
+            model: Product,
+            through: { attributes: ['quantity'] },
+          },
+        ],
+      },
+    ],
+  }).then((user) => {
+    if (!user.t_orders.length) {
+      const message = "L'utilisateur n'a pas de commandes";
+      return res.status(400).json({ message });
+    }
+    const message = `l\'utilisateur possède ${user.t_orders.length} commandes`;
+    res.status(200).json({ message, data: user });
+  });
+});
 export { orderRouter };
