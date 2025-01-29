@@ -1,7 +1,7 @@
 import express from 'express';
 import { User } from '../db/sequelize.mjs';
 import bcrypt, { hash } from 'bcrypt';
-
+import { ValidationError } from 'sequelize';
 const registerRouter = express();
 
 registerRouter.post('/', (req, res) => {
@@ -19,10 +19,17 @@ registerRouter.post('/', (req, res) => {
       User.create({
         username: username,
         password: hashedPassword,
-      }).then((user) => {
-        const message = `l\'utlisateur ${user.username} a été créé avec succès`;
-        res.status(200).json({ message, user });
-      });
+      })
+        .then((user) => {
+          const message = `l\'utlisateur ${user.username} a été créé avec succès`;
+          res.status(200).json({ message, user });
+        })
+        .catch((e) => {
+          //si c'est une erreur de validation renvoie le messgae personnalisé
+          if (e instanceof ValidationError) {
+            return res.status(400).json({ message: e.message, data: e });
+          }
+        });
     })
     .catch((e) => {
       // Définir un message d'erreur pour l'utilisateur de l'API REST
