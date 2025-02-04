@@ -1,13 +1,13 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import { ProductModel } from '../src/models/products.mjs';
+import { ProductModel } from '../models/products.mjs';
 import { products } from './mock-product.mjs';
 import { categories } from './mock-category.mjs';
-import { CategoryModel } from '../src/models/category.mjs';
-import { OrderModel } from '../src/models/order.mjs';
-import { ProductOrderModel } from '../src/models/orderProduct.mjs';
-import { initAssociations } from '../src/models/associations.mjs';
+import { CategoryModel } from '../models/category.mjs';
+import { OrderModel } from '../models/order.mjs';
+import { ProductOrderModel } from '../models/orderProduct.mjs';
+import { initAssociations } from '../models/associations.mjs';
 import bcrypt from 'bcrypt';
-import { UserModel } from '../src/models/user.mjs';
+import { UserModel } from '../models/user.mjs';
 
 //variables d'environnement
 //https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor

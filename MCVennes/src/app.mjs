@@ -1,10 +1,10 @@
 import express from 'express';
-import { productsRouter } from '../routes/product.mjs';
-import { orderRouter } from '../routes/order.mjs';
-import { loginRouter } from '../routes/login.mjs';
-import { registerRouter } from '../routes/register.mjs';
-import { initDb, sequelize } from '../db/sequelize.mjs';
-import { error } from '../routes/helper.mjs';
+import { productsRouter } from './routes/product.mjs';
+import { orderRouter } from './routes/order.mjs';
+import { loginRouter } from './routes/login.mjs';
+import { registerRouter } from './routes/register.mjs';
+import { initDb, sequelize } from './db/sequelize.mjs';
+import { error } from './routes/helper.mjs';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger.mjs';
 

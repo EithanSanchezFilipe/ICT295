@@ -22,7 +22,7 @@ const options = {
         },
       },
       schemas: {
-        Teacher: {
+        Product: {
           type: 'object',
           required: ['name', 'price', 'created'],
           properties: {
@@ -54,7 +54,7 @@ const options = {
       },
     ],
   },
-  apis: ['./src/routes/*.mjs'], // Chemins vers vos fichiers de route
+  apis: ['src/routes/*.mjs'], // Chemins vers vos fichiers de route
 };
 const swaggerSpec = swaggerJSDoc(options);
 export { swaggerSpec };
